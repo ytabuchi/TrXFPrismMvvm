@@ -4,8 +4,13 @@
              x:Class="MobileApp.Views.MainPage"
              Title="{Binding Title}">
 
-    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+    <StackLayout Padding="10">
         <Label Text="Welcome to Xamarin Forms and Prism!" />
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Can Click" VerticalTextAlignment="Center" />
+            <Switch IsToggled="{Binding CanClick}" />
+        </StackLayout>
+        <Button Command="{Binding GetWeathersCommand}" Text="Get Weathers" />
     </StackLayout>
 
 </ContentPage>
