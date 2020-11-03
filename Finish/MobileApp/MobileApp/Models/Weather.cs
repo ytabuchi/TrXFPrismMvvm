@@ -15,5 +15,9 @@ namespace MobileApp.Models
         public int TemperatureFahrenheit { get; set; }
         [JsonProperty("summary")]
         public string Summary { get; set; }
+        public string ImageUrl
+        {
+            get => $"{Summary}.png";
+        }
     }
 }

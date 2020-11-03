@@ -542,21 +542,140 @@ public class MainPageViewModel : ViewModelBase
 </StackLayout>
 ```
 
-エディタ下部の「<<」ボタンをクリックすると XAML Previewer が表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。
+エディタ下部の「<<」ボタンをクリックすると XAML プレビューアーが表示されますが、「XAML ホットリロード」の機能を使用した方が早いかもしれません。
 
-<img src="./images/prism-25.png" width="600">
+<img src="./images/prism-31.png" width="600">
+
+プレビューアーについての詳細は [XAML プレビューアー Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/xaml-previewer/?pivots=windows) を参照してください。
+
+XAML ホットリロードについての詳細は [XAML ホットリロード Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/xaml/hot-reload)
 
 
 この時点でデバッグ実行してみましょう。View を表示した際とボタンをクリックした際にスイッチとボタンが連動して動作するのが分かるはずです。
 
+<img src="./images/prism-32.png" width="300">
+
 `MainPageViewModel` や `WeatherService` にブレークポイントを貼ると処理の内容を確認できます。
 
-<img src="./images/prism-26.png" width="300">
+
+
+#### CollectionView の利用
+
+ブレークポイントで Web API からデータが取得できていることが確認できたら、取得したデータを表示する `CollectionView` を追加します。
+
+`StackLayout` 内の一番下（`Button` の下）に次を追加します。
+
+```xml
+<CollectionView ItemsSource="{Binding Weathers}" 
+                ItemsLayout="VerticalGrid, 2">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+                    
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+```
+
+`CollectionView` の詳細は [Xamarin\.Forms CollectionView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/) を参照してください。
+
+特に `ItemsLayout` プロパティで以下の表示方法を利用できます。今回は縦方向の 2列のグリッドを使用しています。
+
+- 縦方向のリスト
+- 横方向のリスト
+- 縦方向のグリッド
+- 横方向のグリッド
+
+Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/layout) を参照してください。
+
+`CollectionView` の `DataTemplate` 内には自由にレイアウトを作成できます。次の XAML を追加してください。
+
+```xml
+<Grid Padding="10">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0"
+           HorizontalTextAlignment="Center"
+           Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+    <Label Grid.Row="1"
+           HorizontalTextAlignment="Center"
+           Text="{Binding TemperatureCelsius, StringFormat='{0}℃'}" />
+    <Label Grid.Row="2"
+           HorizontalTextAlignment="Center"
+           Text="{Binding Summary}" />
+</Grid>
+```
+
+次のような画面が表示されれば OK です。
+
+<img src="./images/prism-33.png" width="300">
+
+日付や温度の表示方法を変更するために、`StringFormat` を使用しています。`StringFormat` の詳細は [Xamarin\.Forms の文字列の書式設定 \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/app-fundamentals/data-binding/string-formatting) を参照してください。
 
 
 
+#### 天気アイコンの表示
+
+文字だけだと寂しいので、天気をアイコンで表示してみましょう。画像を表示するには `Image` クラスを利用します。
+
+`Image` クラスの重要なプロパティに [Image\.Source プロパティ \(Xamarin\.Forms\) \| Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/api/xamarin.forms.image.source?view=xamarin-forms#Xamarin_Forms_Image_Source) があります。
+
+ImageSource インスタンスは、イメージソースの種類ごとに静的メソッドを使用して取得できます。
+
+- FromFile - 各プラットフォームで解決できるファイル名またはファイルパスが必要です。
+- FromUri - Uri オブジェクトが必要です。例: `new Uri("http://server.com/image.jpg")`
+- FromResource - ビルドアクション EmbeddedResource を使用して、アプリケーションまたは .NET Standard ライブラリプロジェクトに埋め込まれているイメージファイルのリソース識別子が必要です。
+- FromStream - イメージデータを提供するストリームが必要です。
+
+詳細は [Image in Xamarin\.Forms \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/images?tabs=windows) を参照してください。
+
+`FromResource` は .NET Standard プロジェクトに 1つだけ画像ファイルを用意すれば良いため、アプリケーションで固定のアイコンなどを利用する場合に便利です。
+
+今回はファイル名をバインドするため、各 OS プロジェクトに画像を配置します。
 
 
+#### Android プロジェクトに画像を追加
+
+
+Android プロジェクトを開き、「Resources/drawable」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
+
+<img src="./images/prism-34.png" width="300">
+
+画像を選択し、プロパティウィンドウでビルドアクションが「AndroidResource」になっていることを確認してください。
+
+<img src="./images/prism-35.png" width="300">
+
+
+Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます。
+
+`Label` が 3つ並んでいる `Grid` の一番上に `Image` を追加します。
+
+```xml
+<Image Grid.Row="0"
+       Grid.RowSpan="3"
+       WidthRequest="120"
+       HeightRequest="120"
+       Source="{Binding Summary, StringFormat='{0}.png'}" />
+```
+
+再度ビルドしてみましょう。次のようになれば OK です。
+
+<img src="./images/prism-36.png" width="300">
+
+
+
+#### 選択の追加
+
+選択して、各項目を表示するページに遷移してみましょう。
+
+標準で `CollectionView` は選択が無効になっています。`MainPage.xaml` の `CollectionView` のプロパティに次を追加します。
+
+```xml
+SelectionMode="Single"
+SelectionChanged="OnCollectionViewSelectionChanged"
+```
 
 
 
