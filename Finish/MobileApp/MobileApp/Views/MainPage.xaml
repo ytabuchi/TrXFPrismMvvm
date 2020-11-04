@@ -2,7 +2,6 @@
 <ContentPage x:Class="MobileApp.Views.MainPage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MobileApp.Extensions;assembly=MobileApp"
              Title="{Binding Title}">
 
     <StackLayout Padding="10">
@@ -13,36 +12,35 @@
         </StackLayout>
         <Button Command="{Binding GetWeathersCommand}" Text="Get Weathers" />
 
-        <CollectionView ItemsLayout="VerticalGrid, 2"
-                        ItemsSource="{Binding Weathers}"
-                        SelectionChanged="OnCollectionViewSelectionChanged"
-                        SelectionMode="Single">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Image Grid.Row="0"
-                               Grid.RowSpan="3"
-                               WidthRequest="120"
-                               HeightRequest="120"
-                               Source="{Binding Summary, StringFormat='{0}.png'}" />
-                        <Label Grid.Row="0"
-                               HorizontalTextAlignment="Center"
-                               Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
-                        <Label Grid.Row="1"
-                               HorizontalTextAlignment="Center"
-                               Text="{Binding TemperatureCelsius, StringFormat='{0}℃'}" />
-                        <Label Grid.Row="2"
-                               HorizontalTextAlignment="Center"
-                               Text="{Binding Summary}" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0"
+                                   Grid.RowSpan="3"
+                                   WidthRequest="120"
+                                   HeightRequest="120"
+                                   Source="{Binding Summary, StringFormat='{0}.png'}" />
+                            <Label Grid.Row="0"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                            <Label Grid.Row="1"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding TemperatureCelsius, StringFormat='{0}℃'}" />
+                            <Label Grid.Row="2"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Summary}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
 
     </StackLayout>
 

@@ -6,6 +6,7 @@ using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace MobileApp.ViewModels
             get { return canClick; }
             set { SetProperty(ref canClick, value); }
         }
+
+        public bool IsRefreshing => !CanClick;
 
         public DelegateCommand GetWeathersCommand { get; private set; }
 

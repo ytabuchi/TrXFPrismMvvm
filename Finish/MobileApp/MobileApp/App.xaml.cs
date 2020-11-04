@@ -26,7 +26,11 @@ namespace MobileApp
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
+#if DEBUG
+            containerRegistry.RegisterSingleton<IWeatherService, MockWeatherService>();
+#else
             containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+#endif
 
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();

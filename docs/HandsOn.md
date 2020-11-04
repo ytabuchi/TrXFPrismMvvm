@@ -264,6 +264,7 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
 
 
+
 ### サービスのインターフェイスと実装クラスの作成
 
 次に Web API からデータを取得するインターフェイスと実装を作成します。
@@ -449,7 +450,6 @@ public bool CanClick
 }
 ```
 
-
 最後にこの View を表示した際にメソッドを実行できるように `OnNavigatedTo` の `override` を追加します。
 
 ```csharp
@@ -459,7 +459,6 @@ public override async void OnNavigatedTo(INavigationParameters parameters)
     await GetWeathersAsync();
 }
 ```
-
 
 ViewModel は全体では次のようになっています。
 
@@ -519,9 +518,7 @@ public class MainPageViewModel : ViewModelBase
 }
 ```
 
-
 これで ViewModel は完成です。
-
 
 
 
@@ -666,16 +663,78 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 
 
-#### 選択の追加
 
-選択して、各項目を表示するページに遷移してみましょう。
 
-標準で `CollectionView` は選択が無効になっています。`MainPage.xaml` の `CollectionView` のプロパティに次を追加します。
 
-```xml
-SelectionMode="Single"
-SelectionChanged="OnCollectionViewSelectionChanged"
+
+
+
+
+
+
+## Mock の追加
+
+
+まだ Web API が完成していない場合やテストをする場合などに、Mock を使用してダミーデータを表示するようにしてみましょう。
+
+`Services` フォルダを右クリックして「追加＞クラス」をクリックし、`MockWeatherService.cs` と名前を付けてクラスを作成します。
+
+`IWeatherService` の継承を追加し、実装を追加します。次のようになります。
+
+```csharp
+class MockWeatherService : IWeatherService
+{
+    public async Task<ObservableCollection<Weather>> GetWeathersAsync()
+    {
+        var weathers = new ObservableCollection<Weather>
+        {
+            new Weather
+            {
+                Date = new DateTime(2020,11,1),
+                Summary = "Rainy",
+                TemperatureCelsius = 20
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,2),
+                Summary = "Cloudy",
+                TemperatureCelsius = 25
+            },
+            new Weather
+            {
+                Date = new DateTime(2020,11,3),
+                Summary = "Sunny",
+                TemperatureCelsius = 30
+            }
+        };
+
+        return weathers;
+    }
+}
 ```
+
+次に `App.xaml.cs` を開き、`WeatherService` を登録していた部分を次のように修正します。
+
+```csharp
+#if DEBUG
+            containerRegistry.RegisterSingleton<IWeatherService, MockWeatherService>();
+#else
+            containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
+#endif
+```
+
+これでデバッグ用に MockWeatherService を利用できるようになりました。
+
+デバッグ実行して、次のように 2020/11/1 から 2020/11/3 までのデータが表示されていれば OK です。
+
+<img src="./images/prism-41.png" width="300">
+
+
+
+
+
+
+
 
 
 
