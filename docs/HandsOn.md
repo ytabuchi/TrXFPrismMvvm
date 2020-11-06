@@ -14,7 +14,7 @@
 
 ### Prism 拡張機能のインストール
 
-Visual Studio のメニューから「拡張機能＞拡張機能の管理」で表示されるダイアログの「オンライン」タブが選択されている状態で右上の検索窓に `prism` と入力して「Prism Template Pack」をインストールします。
+Visual Studio のメニューから「拡張機能＞拡張機能の管理」で表示されるダイアログの「オンライン」タブが選択されている状態で右上の検索窓に `prism` と入力して「Prism Template Pack」をインストールします。(Visual Studioを再起動します。)
 
 <img src="./images/prism-01.png" width="600" />
 
@@ -268,10 +268,10 @@ Xamarin.Forms プロジェクトを右クリックから「NuGet パッケージ
 
 <img src="./images/prism-23.png" width="600" />
 
-`IWeaterService.cs` で、インターフェイスを `public` 属性にして、`Weather` のコレクションを戻り値に持つ `GetWeathersAsync` メソッドを追加します。次のようになります。
+`IWeatherService.cs` で、インターフェイスを `public` 属性にして、`Weather` のコレクションを戻り値に持つ `GetWeathersAsync` メソッドを追加します。次のようになります。
 
 ```csharp
-public interface IWeaterService
+public interface IWeatherService
 {
     Task<ObservableCollection<Weather>> GetWeathersAsync();
 }
@@ -739,7 +739,7 @@ public DelegateCommand SelectWeatherCommand { get; private set; }
 SelectWeatherCommand = new DelegateCommand(
     async () => await _pageDialogService.DisplayAlertAsync(
         "Dialog Title",
-        $"{SelectedWeather.Date.ToString("yyyy/MM/dd")} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
+        $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
         "OK")
     );
 ```
