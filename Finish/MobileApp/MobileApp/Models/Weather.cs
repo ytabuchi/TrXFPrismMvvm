@@ -9,15 +9,9 @@ namespace MobileApp.Models
     {
         [JsonProperty("date")]
         public DateTime Date { get; set; }
-        [JsonProperty("temperatureC")]
-        public int TemperatureCelsius { get; set; }
-        [JsonProperty("temperatureF")]
-        public int TemperatureFahrenheit { get; set; }
+        [JsonProperty("temperature")]
+        public int Temperature { get; set; }
         [JsonProperty("summary")]
         public string Summary { get; set; }
-        public string ImageUrl
-        {
-            get => $"{Summary}.png";
-        }
     }
 }

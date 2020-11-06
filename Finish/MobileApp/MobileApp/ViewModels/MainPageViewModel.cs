@@ -3,6 +3,8 @@ using MobileApp.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +17,8 @@ namespace MobileApp.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
+        private readonly IPageDialogService _pageDialogService;
+        private readonly IDialogService _dialogService;
         private readonly IWeatherService _weatherService;
 
         public ObservableCollection<Weather> Weathers { get; set; } = new ObservableCollection<Weather>();
@@ -28,19 +32,39 @@ namespace MobileApp.ViewModels
 
         public bool IsRefreshing => !CanClick;
 
+        private Weather selectedWeather;
+        public Weather SelectedWeather
+        {
+            get { return selectedWeather; }
+            set { SetProperty(ref selectedWeather, value); }
+        }
+
         public DelegateCommand GetWeathersCommand { get; private set; }
+        public DelegateCommand SelectWeatherCommand { get; private set; }
 
         public MainPageViewModel(INavigationService navigationService,
+                                 IPageDialogService pageDialogService,
+                                 IDialogService dialogService,
                                  IWeatherService weatherService)
             : base(navigationService)
         {
             Title = "Main Page";
+            _pageDialogService = pageDialogService;
+            _dialogService = dialogService;
             _weatherService = weatherService;
 
             GetWeathersCommand = new DelegateCommand(
                 async () => await GetWeathersAsync(),
                 () => CanClick)
                 .ObservesCanExecute(() => CanClick);
+
+            SelectWeatherCommand = new DelegateCommand(
+                () => ShowSelectedWeather()
+                //async () => await _pageDialogService.DisplayAlertAsync(
+                //    "Dialog Title",
+                //    $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
+                //    "OK")
+                );
         }
 
         public override async void OnNavigatedTo(INavigationParameters parameters)
@@ -66,6 +90,19 @@ namespace MobileApp.ViewModels
             }
 
             CanClick = true;
+        }
+
+        private void ShowSelectedWeather()
+        {
+            if (SelectedWeather == null)
+                return;
+
+            var parameters = new DialogParameters
+            {
+                { "Title", "Dialog Title" },
+                { "Message", $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。" }
+            };
+            _dialogService.ShowDialog("DemoDialog", parameters);
         }
     }
 }

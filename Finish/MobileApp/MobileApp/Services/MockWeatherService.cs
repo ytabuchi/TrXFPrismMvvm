@@ -17,19 +17,19 @@ namespace MobileApp.Services
                 {
                     Date = new DateTime(2020,11,1),
                     Summary = "Rainy",
-                    TemperatureCelsius = 20
+                    Temperature = 20
                 },
                 new Weather
                 {
                     Date = new DateTime(2020,11,2),
                     Summary = "Cloudy",
-                    TemperatureCelsius = 25
+                    Temperature = 25
                 },
                 new Weather
                 {
                     Date = new DateTime(2020,11,3),
                     Summary = "Sunny",
-                    TemperatureCelsius = 30
+                    Temperature = 30
                 }
             };
 

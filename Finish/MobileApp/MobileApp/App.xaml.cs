@@ -6,6 +6,7 @@ using Xamarin.Essentials.Interfaces;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Forms;
 using MobileApp.Services;
+using MobileApp.Dialogs;
 
 namespace MobileApp
 {
@@ -34,6 +35,8 @@ namespace MobileApp
 
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+
+            containerRegistry.RegisterDialog<DemoDialog, DemoDialogViewModel>();
         }
     }
 }

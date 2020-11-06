@@ -180,36 +180,31 @@ MainPage のパーシャルクラスです。`InitializeComponent` メソッド�
 
 ```json
 [
-  {
-    date: "2020-10-16T03:22:30.9605433+00:00",
-    temperatureC: 36,
-    temperatureF: 96,
-    summary: "Hot",
-  },
-  {
-    date: "2020-10-17T03:22:30.9615198+00:00",
-    temperatureC: 19,
-    temperatureF: 66,
-    summary: "Hot",
-  },
-  {
-    date: "2020-10-18T03:22:30.9615238+00:00",
-    temperatureC: -9,
-    temperatureF: 16,
-    summary: "Freezing",
-  },
-  {
-    date: "2020-10-19T03:22:30.9615244+00:00",
-    temperatureC: -7,
-    temperatureF: 20,
-    summary: "Hot",
-  },
-  {
-    date: "2020-10-20T03:22:30.9615248+00:00",
-    temperatureC: 26,
-    temperatureF: 78,
-    summary: "Mild",
-  },
+    {
+        date: "2020-11-07T06:52:22.3435607+00:00",
+        temperature: 24,
+        summary: "Sunny",
+    },
+    {
+        date: "2020-11-08T06:52:22.343578+00:00",
+        temperature: -17,
+        summary: "Rainy",
+    },
+    {
+        date: "2020-11-09T06:52:22.3435786+00:00",
+        temperature: 1,
+        summary: "Snowy",
+    },
+    {
+        date: "2020-11-10T06:52:22.343579+00:00",
+        temperature: -3,
+        summary: "Sunny",
+    },
+    {
+        date: "2020-11-11T06:52:22.3435793+00:00",
+        temperature: 17,
+        summary: "Rainy",
+    },
 ]
 ```
 
@@ -235,10 +230,8 @@ public class Weather
 {
     [JsonProperty("date")]
     public DateTime Date { get; set; }
-    [JsonProperty("temperatureC")]
-    public int TemperatureCelsius { get; set; }
-    [JsonProperty("temperatureF")]
-    public int TemperatureFahrenheit { get; set; }
+    [JsonProperty("temperature")]
+    public int Temperature { get; set; }
     [JsonProperty("summary")]
     public string Summary { get; set; }
 }
@@ -332,6 +325,7 @@ class WeatherService : IWeatherService
 
 
 
+
 ### コンテナーへの登録
 
 インターフェイスと実装クラスを追加したので、Prism に教える必要があります。
@@ -347,11 +341,11 @@ containerRegistry.RegisterSingleton<IWeatherService, WeatherService>();
 
 
 
-### ViewModel の実装
+### ViewModel の作成
 
 続いて ViewModel の実装を行います。`MainPageViewModel.cs` を開きます。
 
-コンストラクターの引数に `IWeatherService` を追加し、プロパティを追加します。次のようになります。
+コンストラクターの引数に `IWeatherService` を追加し、フィールドを追加します。次のようになります。
 
 
 ```csharp
@@ -522,6 +516,7 @@ public class MainPageViewModel : ViewModelBase
 
 
 
+
 ### View の作成
 
 最後に View を作成していきましょう。`MainPage.xaml` を開きます。
@@ -563,8 +558,7 @@ XAML ホットリロードについての詳細は [XAML ホットリロード X
 `StackLayout` 内の一番下（`Button` の下）に次を追加します。
 
 ```xml
-<CollectionView ItemsSource="{Binding Weathers}" 
-                ItemsLayout="VerticalGrid, 2">
+<CollectionView ItemsLayout="VerticalList" ItemsSource="{Binding Weathers}">
     <CollectionView.ItemTemplate>
         <DataTemplate>
                     
@@ -575,7 +569,7 @@ XAML ホットリロードについての詳細は [XAML ホットリロード X
 
 `CollectionView` の詳細は [Xamarin\.Forms CollectionView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/collectionview/) を参照してください。
 
-特に `ItemsLayout` プロパティで以下の表示方法を利用できます。今回は縦方向の 2列のグリッドを使用しています。
+特に `ItemsLayout` プロパティで以下の表示方法を利用できます。今回は縦方向のリストを使用します。
 
 - 縦方向のリスト
 - 横方向のリスト
@@ -587,12 +581,7 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
 `CollectionView` の `DataTemplate` 内には自由にレイアウトを作成できます。次の XAML を追加してください。
 
 ```xml
-<Grid Padding="10">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
+<StackLayout Padding="10" Orientation="Horizontal">
     <Label Grid.Row="0"
            HorizontalTextAlignment="Center"
            Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
@@ -602,7 +591,7 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
     <Label Grid.Row="2"
            HorizontalTextAlignment="Center"
            Text="{Binding Summary}" />
-</Grid>
+</StackLayout>
 ```
 
 次のような画面が表示されれば OK です。
@@ -633,7 +622,7 @@ ImageSource インスタンスは、イメージソースの種類ごとに静�
 今回はファイル名をバインドするため、各 OS プロジェクトに画像を配置します。
 
 
-#### Android プロジェクトに画像を追加
+##### Android プロジェクトに画像を追加
 
 
 Android プロジェクトを開き、「Resources/drawable」にダウンロードした「Resources」フォルダ内の 5つの png ファイルをドラッグ＆ドロップして追加します。
@@ -645,21 +634,201 @@ Android プロジェクトを開き、「Resources/drawable」にダウンロー
 <img src="./images/prism-35.png" width="300">
 
 
+##### iOS プロジェクトに画像を追加
+
+イメージアセットに追加しますが、今回は割愛します。
+
+
+##### XAML のアップデート
+
 Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます。
 
-`Label` が 3つ並んでいる `Grid` の一番上に `Image` を追加します。
+`CollectionView` の `ItemsLayout` を `VerticalGrid, 2` に書き換え、`Grid` に置き換えます。全体では次のようになります。
 
 ```xml
-<Image Grid.Row="0"
-       Grid.RowSpan="3"
-       WidthRequest="120"
-       HeightRequest="120"
-       Source="{Binding Summary, StringFormat='{0}.png'}" />
+<CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0"
+                       Grid.RowSpan="3"
+                       WidthRequest="120"
+                       HeightRequest="120"
+                       Source="{Binding Summary, StringFormat='{0}.png'}" />
+                <Label Grid.Row="0"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                <Label Grid.Row="1"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Temperature, StringFormat='{0}℃'}" />
+                <Label Grid.Row="2"
+                       HorizontalTextAlignment="Center"
+                       Text="{Binding Summary}" />
+            </Grid>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
 ```
 
-再度ビルドしてみましょう。次のようになれば OK です。
+再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
 
 <img src="./images/prism-36.png" width="300">
+
+
+
+#### PullToRefresh の追加
+
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [Xamarin\.Forms RefreshView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/refreshview) を参照してください。（2020年11月現在、日本語ページの表示が崩れているので、英語ページへの参照です。）
+
+
+`MainPage.xaml` を開き、`CollectionView` の上に `RefreshView` を追加します。次のようになります。
+
+```xml
+<RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
+    <CollectionView ItemsLayout="VerticalGrid, 2" ItemsSource="{Binding Weathers}">
+        ...略...
+    </CollectionView>
+</RefreshView>
+```
+
+リフレッシュする時のコマンドはボタンと同じ `GetWeathersCommand` を割り当てます。リフレッシュ中にグルグルの表示やリフレッシュ終了を検知するために `IsRefreshing` プロパティに bool 値を割り当てます。
+
+`MainPageViewModel.cs` を開き、`CanClick` プロパティの下に `IsRefreshing` プロパティを追加します。
+
+```csharp
+public bool IsRefreshing => !CanClick;
+```
+
+再度デバッグ実行し、引っ張って更新できれば OK です。
+
+
+
+#### ダイアログの表示
+
+Xamarin.Forms では標準で `DisplayAlert`、`DisplayActionSheet`、`DisplayPromptAsync` の 3つの `Page` クラスのメソッドが用意されています。これらのメソッドは ViewModel では直接は呼び出せないため、Prism ではこれをラップした `IPageDialogService` と、独自のビューを利用できる `IDialogService` を用意しています。Prism のダイアログについての詳細は [Application Dialogs \| Prism](https://prismlibrary.com/docs/xamarin-forms/dialogs/index.html) をご覧ください。
+
+これらを使用して、CollectionView のタップした項目をダイアログに表示してみましょう。
+
+`MainPageViewModel.cs` を開き、バインド対象のプロパティとコマンドを追加します。
+
+`IsRefreshing` プロパティの下に次を追加します。
+
+```csharp
+private Weather selectedWeather;
+public Weather SelectedWeather
+{
+    get { return selectedWeather; }
+    set { SetProperty(ref selectedWeather, value); }
+}
+```
+
+そのまま `GetWeathersCommand` の下に次を追加します。
+
+```csharp
+public DelegateCommand SelectWeatherCommand { get; private set; }
+```
+
+コンストラクター内にコマンドの実装を追加します。
+
+```csharp
+SelectWeatherCommand = new DelegateCommand(
+    async () => await _pageDialogService.DisplayAlertAsync(
+        "Dialog Title",
+        $"{SelectedWeather.Date.ToString("yyyy/MM/dd")} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
+        "OK")
+    );
+```
+
+ここで利用している Prism の `IPageDialogService` を使用するには、依存を追加します。
+
+クラスの先頭に次を追加します。
+
+```csharp
+private readonly IPageDialogService _pageDialogService;
+```
+
+コンストラクターの引数に `IPageDialogService pageDialogService` を追加し、コンストラクター内でフィールドに割り当てます。
+
+この時点でコンストラクターは次のようになります。
+
+```csharp
+public MainPageViewModel(INavigationService navigationService,
+                         IPageDialogService pageDialogService,
+                         IWeatherService weatherService)
+    : base(navigationService)
+{
+    Title = "Main Page";
+    _pageDialogService = pageDialogService;
+    _weatherService = weatherService;
+
+    GetWeathersCommand = new DelegateCommand(
+        async () => await GetWeathersAsync(),
+        () => CanClick)
+        .ObservesCanExecute(() => CanClick);
+
+    SelectWeatherCommand = new DelegateCommand(
+        async () => await _pageDialogService.DisplayAlertAsync(
+            "Dialog Title",
+            $"{SelectedWeather.Date:yyyy/MM/dd} は {SelectedWeather.Temperature}℃ で {SelectedWeather.Summary} です。",
+            "OK")
+        );
+}
+```
+
+
+最後に `MainPage.xaml` を開き、`CollectionView` に次の 3つの属性を追加し、1つをタップした際にコマンドを発行し、選択項目をバインドするようにします。
+
+```xml
+SelectedItem="{Binding SelectedWeather}"
+SelectionChangedCommand="{Binding SelectWeatherCommand}"
+SelectionMode="Single"
+```
+
+再度ビルドしてデバッグ実行してみましょう。次のようになれば OK です。
+
+<img src="./images/prism-37.png" width="300">
+
+
+独自ダイアログは少し処理が多いので今回は割愛しますが、XAML でビューを定義します。
+
+
+```xml
+<Grid x:Class="MobileApp.Dialogs.DemoDialog"
+      xmlns="http://xamarin.com/schemas/2014/forms"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      BackgroundColor="White">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <BoxView Color="Black" />
+    <Label Margin="20,5"
+           Style="{DynamicResource TitleStyle}"
+           Text="{Binding Title}"
+           TextColor="White" />
+    <Label Grid.Row="1"
+           Margin="20,0,20,10"
+           Text="{Binding Message}" />
+    <Button Grid.Row="2"
+            Margin="0,0,0,10"
+            HorizontalOptions="Center"
+            Command="{Binding CloseCommand}"
+            Text="Ok" />
+</Grid>
+```
+
+次のように表示されます。
+
+<img src="./images/prism-38.png" width="300">
+
+
 
 
 
@@ -675,7 +844,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 ## Mock の追加
 
 
-まだ Web API が完成していない場合やテストをする場合などに、Mock を使用してダミーデータを表示するようにしてみましょう。
+まだ Web API が完成していない場合やテストをする場合を考慮して、ダミーデータを利用するようにしてみましょう。
 
 `Services` フォルダを右クリックして「追加＞クラス」をクリックし、`MockWeatherService.cs` と名前を付けてクラスを作成します。
 
@@ -731,6 +900,9 @@ class MockWeatherService : IWeatherService
 
 
 
+## お疲れ様でした
+
+これで本日のトレーニングはすべて終了です。Xamarin.Forms、Prism にはもっと色々な機能があります。是非使いこなして皆様のモバイルアプリ開発が楽しくなることを願っています！
 
 
 
@@ -741,7 +913,15 @@ class MockWeatherService : IWeatherService
 
 
 
-## Web API を作成
+
+
+
+
+
+## Appendix
+
+
+### Web API を作成
 
 ローカルデバッグ用に .NET Core の Web API を作成します。
 
@@ -764,20 +944,6 @@ class MockWeatherService : IWeatherService
 <img src="./images/webapi-03.png" width="600" />
 
 
-詳しくは解説しませんが、`WebApi/Properties/launchSettings.json` の以下の設定により `http://localhost:5000/weatherforecast` でデバッグできます。
-
-```json
-"WebApi": {
-  "commandName": "Project",
-  "launchBrowser": true,
-  "launchUrl": "weatherforecast",
-  "applicationUrl": "http://localhost:5000",
-  "environmentVariables": {
-    "ASPNETCORE_ENVIRONMENT": "Development"
-  }
-}
-```
-
 また、`WebApi/Controllers/WeatherForecastController.cs` の以下のコードでアクセスするたびにランダムに天気の予測を返していることが分かります。
 
 ```csharp
@@ -799,10 +965,6 @@ public IEnumerable<WeatherForecast> Get()
 
 
 
-
-
-
-## Appendix
 
 ### .NET MAUI について
 
@@ -852,6 +1014,8 @@ void ExecuteClickCommand ()
 
 - [\.NET MAUIって何？ \- nuits\.jp blog](https://www.nuits.jp/entry/what-is-maui)
 - [Introducing \.NET Multi\-platform App UI \| \.NET Blog](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/)
+
+
 
 
 
