@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MobileApp\MobileApp.csproj">
-      <Project>{A682884C-CB44-4A89-B752-27BB634E0ABE}</Project>
+      <Project>{C4174EBE-102D-43E7-947F-0689276C42AB}</Project>
       <Name>MobileApp</Name>
     </ProjectReference>
   </ItemGroup>
