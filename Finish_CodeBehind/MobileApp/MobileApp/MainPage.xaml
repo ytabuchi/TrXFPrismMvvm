@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.MainPage">
+
+    <StackLayout Padding="10">
+        <Label Text="Welcome to Xamarin Forms!" />
+        <StackLayout Orientation="Horizontal">
+            <Label VerticalTextAlignment="Center" Text="Can Click" />
+            <Switch IsToggled="{Binding CanClick}" />
+        </StackLayout>
+        <Button Clicked="GetWeathersButtonOnClicked" Text="Get Weathers" />
+
+        <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView x:Name="collectionView"
+                            ItemsLayout="VerticalGrid, 2"
+                            ItemsSource="{Binding }"
+                            SelectedItem="{Binding SelectedWeather}"
+                            SelectionChanged="OnCollectionViewSelectionChanged"
+                            SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0"
+                                   Grid.RowSpan="3"
+                                   WidthRequest="120"
+                                   HeightRequest="120"
+                                   Source="{Binding Summary, StringFormat='{0}.png'}" />
+                            <Label Grid.Row="0"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
+                            <Label Grid.Row="1"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Temperature, StringFormat='{0}℃'}" />
+                            <Label Grid.Row="2"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Summary}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+    </StackLayout>
+
+</ContentPage>
