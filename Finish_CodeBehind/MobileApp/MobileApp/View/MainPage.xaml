@@ -7,11 +7,12 @@
         <Label Text="Welcome to Xamarin Forms!" />
         <StackLayout Orientation="Horizontal">
             <Label VerticalTextAlignment="Center" Text="Can Click" />
-            <Switch IsToggled="{Binding CanClick}" />
+            <Switch x:Name="canClickSwitch" IsToggled="True"/>
         </StackLayout>
-        <Button Clicked="GetWeathersButtonOnClicked" Text="Get Weathers" />
+        <Button Clicked="GetWeathersButtonOnClicked" Text="Get Weathers"
+                IsEnabled="{Binding Source={x:Reference canClickSwitch}, Path=IsToggled}"/>
 
-        <RefreshView Command="{Binding GetWeathersCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <RefreshView x:Name="refreshView" Refreshing="PullToRefreshing">
             <CollectionView x:Name="collectionView"
                             ItemsLayout="VerticalGrid, 2"
                             ItemsSource="{Binding }"

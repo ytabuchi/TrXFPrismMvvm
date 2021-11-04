@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MobileApp.Services;
 using Xamarin.Forms;
@@ -39,9 +36,21 @@ namespace MobileApp
             if (e.CurrentSelection.Count == 0)
                 return;
 
-            var current = (e.CurrentSelection.FirstOrDefault() as Weather)?.Date;
-            await DisplayAlert("Selected", $"{current} is selected.", "OK");
+            var current = e.CurrentSelection.FirstOrDefault() as Weather;
             collectionView.SelectedItem = null;
+
+            await Navigation.PushModalAsync(new SecondPage($"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。" ));
+        }
+
+        async void GetWeathersButtonOnClicked(object sender, EventArgs e)
+        {
+            await GetWeathersAsync();
+        }
+
+        async void PullToRefreshing(object sender, EventArgs e)
+        {
+            await GetWeathersAsync();
+            refreshView.IsRefreshing = false;
         }
 
         async Task GetWeathersAsync()
@@ -49,11 +58,6 @@ namespace MobileApp
             Weathers.Clear();
             Weathers = new ObservableCollection<Weather>(await _weatherService.GetWeathersAsync());
             BindingContext = Weathers;
-        }
-
-        async void GetWeathersButtonOnClicked(object sender, EventArgs e)
-        {
-            await GetWeathersAsync();
         }
     }
 }
