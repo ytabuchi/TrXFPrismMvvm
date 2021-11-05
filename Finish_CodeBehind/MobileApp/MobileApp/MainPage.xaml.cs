@@ -39,7 +39,8 @@ namespace MobileApp
             var current = e.CurrentSelection.FirstOrDefault() as Weather;
             collectionView.SelectedItem = null;
 
-            await Navigation.PushModalAsync(new SecondPage($"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。" ));
+            var message = $"{current?.Date:yyyy/MM/dd} は {current?.Temperature}℃ で {current?.Summary} です。";
+            await DisplayAlert ("weather", message, "OK");
         }
 
         void SwitchOnToggled(object sender, ToggledEventArgs e)
