@@ -313,19 +313,19 @@ void GetWeathersAsync()
     {
         new Weather
         {
-            Date = new DateTime(2020,11,1),
+            Date = new DateTime(2021,11,1),
             Summary = "Rainy",
             Temperature = 20
         },
         new Weather
         {
-            Date = new DateTime(2020,11,2),
+            Date = new DateTime(2021,11,2),
             Summary = "Cloudy",
             Temperature = 25
         },
         new Weather
         {
-            Date = new DateTime(2020,11,3),
+            Date = new DateTime(2021,11,3),
             Summary = "Sunny",
             Temperature = 30
         }
@@ -577,27 +577,27 @@ MainPage のパーシャルクラスです。`InitializeComponent` メソッド�
 ```json
 [
     {
-        date: "2020-11-07T06:52:22.3435607+00:00",
+        date: "2021-11-07T06:52:22.3435607+00:00",
         temperature: 24,
         summary: "Sunny",
     },
     {
-        date: "2020-11-08T06:52:22.343578+00:00",
+        date: "2021-11-08T06:52:22.343578+00:00",
         temperature: -17,
         summary: "Rainy",
     },
     {
-        date: "2020-11-09T06:52:22.3435786+00:00",
+        date: "2021-11-09T06:52:22.3435786+00:00",
         temperature: 1,
         summary: "Snowy",
     },
     {
-        date: "2020-11-10T06:52:22.343579+00:00",
+        date: "2021-11-10T06:52:22.343579+00:00",
         temperature: -3,
         summary: "Sunny",
     },
     {
-        date: "2020-11-11T06:52:22.3435793+00:00",
+        date: "2021-11-11T06:52:22.3435793+00:00",
         temperature: 17,
         summary: "Rainy",
     },
@@ -1006,7 +1006,7 @@ Layout の詳細は [Xamarin\.Forms CollectionView レイアウト \- Xamarin \|
            Text="{Binding Date, StringFormat='{}{0:yyyy/MM/dd}'}" />
     <Label Grid.Row="1"
            HorizontalTextAlignment="Center"
-           Text="{Binding TemperatureCelsius, StringFormat='{0}℃'}" />
+           Text="{Binding Temperature, StringFormat='{0}℃'}" />
     <Label Grid.Row="2"
            HorizontalTextAlignment="Center"
            Text="{Binding Summary}" />
@@ -1102,7 +1102,7 @@ Xamarin.Forms プロジェクトに移動し、`MainPage.xaml` を開きます�
 
 #### PullToRefresh の追加
 
-スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [Xamarin\.Forms RefreshView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/refreshview) を参照してください。（2020年11月現在、日本語ページの表示が崩れているので、英語ページへの参照です。）
+スクロール可能なコントロールを下に引っ張って内容をリロードする Pull-to-Refresh の機能を追加します。Xamarin.Forms では `RefreshView` が用意されています。`RefreshView` の詳細は [Xamarin\.Forms RefreshView \- Xamarin \| Microsoft Docs](https://docs.microsoft.com/ja-jp/xamarin/xamarin-forms/user-interface/refreshview) を参照してください。
 
 
 `MainPage.xaml` を開き、`CollectionView` の上に `RefreshView` を追加します。次のようになります。
@@ -1278,21 +1278,21 @@ class MockWeatherService : IWeatherService
         {
             new Weather
             {
-                Date = new DateTime(2020,11,1),
+                Date = new DateTime(2021,11,1),
                 Summary = "Rainy",
-                TemperatureCelsius = 20
+                Temperature = 20
             },
             new Weather
             {
-                Date = new DateTime(2020,11,2),
+                Date = new DateTime(2021,11,2),
                 Summary = "Cloudy",
-                TemperatureCelsius = 25
+                Temperature = 25
             },
             new Weather
             {
-                Date = new DateTime(2020,11,3),
+                Date = new DateTime(2021,11,3),
                 Summary = "Sunny",
-                TemperatureCelsius = 30
+                Temperature = 30
             }
         };
 
@@ -1313,7 +1313,7 @@ class MockWeatherService : IWeatherService
 
 これでデバッグ用に MockWeatherService を利用できるようになりました。
 
-デバッグ実行して、次のように 2020/11/1 から 2020/11/3 までのデータが表示されていれば OK です。
+デバッグ実行して、次のように 2021/11/1 から 2021/11/3 までのデータが表示されていれば OK です。
 
 <img src="./images/prism-41.png" width="300">
 
